@@ -16,6 +16,10 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { TablesComponent } from './tables/tables.component';
+import { HospitalesComponent } from './hospitales/hospitales.component';
+import { ProfileComponent } from './profile/profile.component';
+import { MedicosComponent } from './medicos/medicos.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +32,11 @@ import { TablesComponent } from './tables/tables.component';
         AccountSettingsComponent,
         PromesasComponent,
         RxjsComponent,
-        TablesComponent
+        TablesComponent,
+        HospitalesComponent,
+        ProfileComponent,
+        MedicosComponent,
+        UsuariosComponent
     ],
     imports: [
         SharedModule,
