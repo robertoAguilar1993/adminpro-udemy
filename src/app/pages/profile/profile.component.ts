@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UsuarioService } from '../../services/service.index';
+import { UsuarioService, SubirArchivoService } from '../../services/service.index';
 import { Usuario } from '../../models/usuario.model';
 import { URL_SERVICIOS } from '../../config/config';
 
@@ -16,16 +16,31 @@ export class ProfileComponent implements OnInit {
   imagenSubir: File;
   imagenTemp: any;
 
-  constructor ( private _usuarioServece: UsuarioService ) {
-    this.usuario = _usuarioServece.getUsuario();
+  constructor (
+    private _usuarioServece: UsuarioService
+     ) {
+    this.usuario = this._usuarioServece.usuario;
   }
 
   ngOnInit() {
   }
 
-  guardar(forma: NgForm) {
+  guardar(forma: Usuario) {
     console.log('Guardar usuario');
     console.log(forma);
+
+    this.usuario.nombre = forma.nombre;
+    if ( !this.usuario.google ) {
+      this.usuario.email = forma.email;
+    }
+
+    this._usuarioServece.actualizarUsuario(this.usuario)
+      .subscribe((resp: any) => {
+        console.log('resp');
+        console.log(resp);
+      });
+
+
   }
 
   cargarImagen(img: String) {
@@ -56,7 +71,6 @@ export class ProfileComponent implements OnInit {
   cambiarImagen() {
     console.log('Actualizadndo foto');
     this._usuarioServece.cambiarImagen( this.imagenSubir, this.usuario._id );
-
   }
 
 

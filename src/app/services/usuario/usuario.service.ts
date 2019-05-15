@@ -4,6 +4,7 @@ import { URL_SERVICIOS } from '../../config/config';
 import { Usuario } from '../../models/usuario.model';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { SubirArchivoService } from '../subirArchivo/subir-archivo.service';
 
 
 @Injectable({
@@ -16,7 +17,8 @@ export class UsuarioService {
 
   constructor(
     public http: HttpClient,
-    public router: Router
+    public router: Router,
+    public _subirArchivoService: SubirArchivoService
   ) {
     this.cargarStorage();
    }
@@ -84,6 +86,30 @@ export class UsuarioService {
   }
 
   /**
+   * Servicio para obtener los usuarios
+   */
+  getUsuario() {
+    if (localStorage.getItem('usuario')) {
+      const usuarioLocalStoge = JSON.parse(localStorage.getItem('usuario'));
+      console.log('Usuario de usuarioLocalStoge');
+      console.log(usuarioLocalStoge);
+
+      return new Usuario(
+        usuarioLocalStoge.nombre,
+        usuarioLocalStoge.email,
+        null,
+        usuarioLocalStoge.img,
+        usuarioLocalStoge.role,
+        usuarioLocalStoge.google,
+        usuarioLocalStoge._id
+      );
+    } else {
+      return null;
+    }
+
+  }
+
+  /**
    * Servicio para crear un usuario
    */
   crearUsuario(usuario: Usuario) {
@@ -97,22 +123,20 @@ export class UsuarioService {
       }));
   }
 
-  getUsuario() {
-    if (localStorage.getItem('usuario')) {
-      const usuarioLocalStoge = JSON.parse(localStorage.getItem('usuario'));
-      console.log('Usuario de usuarioLocalStoge');
-      console.log(usuarioLocalStoge);
-
-      return new Usuario(
-        usuarioLocalStoge.nombre,
-        usuarioLocalStoge.email,
-        null,
-        usuarioLocalStoge.img
-      );
-    } else {
-      return null;
-    }
-
+  /**
+   * servicio para actualizar usuario
+   */
+  actualizarUsuario(usuario: Usuario) {
+    console.log('Actualizar usuario');
+    let url = URL_SERVICIOS + '/usuario/' + usuario._id;
+    url += '?token=' + this.token;
+    return this.http.put(url, usuario).pipe(
+      map(((res: any) => {
+        swal('Usuario Actualizado', res.usuario.nombre, 'success');
+        this.guardarStorage(res.usuario.id, this.token, res.usuario);
+        return true;
+      }))
+    );
   }
 
   cargarUsuarios() {
@@ -121,8 +145,17 @@ export class UsuarioService {
   }
 
   cambiarImagen(imagenSubir: File, id: string) {
-    const url = URL_SERVICIOS + '/upload/usuarios/' + id;
-    return this.http.put(url, imagenSubir);
+    this._subirArchivoService.subirArchivo(imagenSubir, 'usuarios', id)
+        .then((resp: any) => {
+          console.log(resp);
+          this.usuario.img = resp.usuario.img;
+          swal('Imagen Actualizado', this.usuario.nombre, 'success');
+          this.guardarStorage(id, this.token, this.usuario);
+        })
+        .catch(resp => {
+          console.log(resp);
+        });
   }
+
 
 }

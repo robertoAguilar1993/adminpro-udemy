@@ -13,13 +13,16 @@ export class HeaderComponent implements OnInit {
   usuario: Usuario;
 
   constructor(private _usuarioService: UsuarioService) {
-    this.usuario = _usuarioService.getUsuario();
   }
 
   ngOnInit() {
+    this.usuario = this._usuarioService.usuario;
   }
 
-  cargarImagen(img: String) {
+  cargarImagen(img: String,  google: boolean) {
+    if ( google ) {
+      return img;
+    }
     return URL_SERVICIOS + '/img/usuarios/' + img;
   }
 

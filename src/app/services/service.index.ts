@@ -1,3 +1,4 @@
+export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { LoginGuadGuard } from './guards/login-guad.guard';
 export { HospitalService } from './hospital/hospital.service';
 export { MedicosService } from './medicos/medicos.service';

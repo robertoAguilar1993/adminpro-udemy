@@ -20,6 +20,7 @@ import { HospitalesComponent } from './hospitales/hospitales.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MedicosComponent } from './medicos/medicos.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
     declarations: [
@@ -39,11 +40,13 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
         UsuariosComponent
     ],
     imports: [
+        CommonModule,
         SharedModule,
         PAGES_ROUTERS,
         FormsModule,
         ChartsModule,
         CommonModule,
+        PipesModule
     ],
     exports: [
         CommonModule,

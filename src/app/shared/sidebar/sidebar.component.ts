@@ -15,13 +15,16 @@ export class SidebarComponent implements OnInit {
   constructor(
     public _sidebarService: SidebarService,
     private _usuarioService: UsuarioService) {
-      this.usuario = _usuarioService.getUsuario();
     }
 
   ngOnInit() {
+    this.usuario = this._usuarioService.usuario;
   }
 
-  cargarImagen(img: String) {
+  cargarImagen(img: String,  google: boolean) {
+    if (google) {
+      return img;
+    }
     return URL_SERVICIOS + '/img/usuarios/' + img;
   }
 
