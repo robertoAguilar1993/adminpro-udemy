@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Medico } from '../../models/medico.model';
 import { MedicosService } from '../../services/service.index';
-import { URL_SERVICIOS } from '../../config/config';
+import { ModalUploadService } from '../../componentes/modal-upload/modal-upload.service';
+
+declare var swal;
+
 
 @Component({
   selector: 'app-medicos',
@@ -13,7 +16,8 @@ export class MedicosComponent implements OnInit {
   medicos: Medico[] = [];
 
   constructor(
-    public _medicosService: MedicosService
+    public _medicosService: MedicosService,
+    public _modalUploadService: ModalUploadService
   ) { }
 
   ngOnInit() {
@@ -26,15 +30,39 @@ export class MedicosComponent implements OnInit {
     });
   }
 
-  cargarImagen(img: String) {
-    return URL_SERVICIOS + '/img/medicos/' + img;
+  actualizarImagen(medico: Medico) {
+    this._modalUploadService.mostrarModal(medico._id, 'medicos');
   }
 
-  buscarMedico() {
-
+  buscarMedico(termino: string) {
+    if ( termino.length <= 0) {
+      this.cargarMedicos();
+      return;
+    }
+    this._medicosService.buscarHospital(termino)
+          .subscribe(resp => {
+            this.medicos = resp;
+          });
   }
 
-  borrarMedico() {
+  borrarMedico(medico: Medico) {
+
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a' + medico.nombre ,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        this._medicosService.borrarMedico(medico._id).subscribe(resp => {
+          this.cargarMedicos();
+        });
+      }
+    });
   }
+
+
 
 }

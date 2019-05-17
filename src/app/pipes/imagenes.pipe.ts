@@ -10,16 +10,11 @@ export class ImagenesPipe implements PipeTransform {
 
     let  url = URL_SERVICIOS + '/img';
 
-    console.log('Img');
-    console.log(img);
-
     if ( !img ) {
-      console.log('la imagen no existe');
       return url + '/usuarios/xxx';
     }
 
     if ( img.indexOf('https') >= 0 ) {
-      console.log('es imgen de google');
       return img;
     }
 
@@ -31,14 +26,11 @@ export class ImagenesPipe implements PipeTransform {
          url += '/medicos/' + img;
         break;
       case 'hospital':
-         url += '/usuarios/' + img;
+         url += '/hospitales/' + img;
         break;
       default:
-        console.log('Tipo de imagen no existe');
         url += '/usuarios/xxx';
     }
-    console.log('url');
-    console.log(url);
     return url;
   }
 

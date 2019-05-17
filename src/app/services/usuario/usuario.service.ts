@@ -5,6 +5,7 @@ import { Usuario } from '../../models/usuario.model';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subirArchivo/subir-archivo.service';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -132,6 +133,10 @@ export class UsuarioService {
     url += '?token=' + this.token;
     return this.http.put(url, usuario).pipe(
       map(((res: any) => {
+        if ( usuario._id === this.usuario._id ) {
+          const usuarioDB: Usuario = res.usuario;
+          this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+        }
         swal('Usuario Actualizado', res.usuario.nombre, 'success');
         this.guardarStorage(res.usuario.id, this.token, res.usuario);
         return true;
@@ -139,15 +144,34 @@ export class UsuarioService {
     );
   }
 
-  cargarUsuarios() {
-    const url = URL_SERVICIOS + '/usuario';
+  cargarUsuarios(desde: number = 0) {
+    const url = URL_SERVICIOS + '/usuario?desde=' + desde;
     return this.http.get(url);
   }
+
+  buscarUsuario(termino: string) {
+    const url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino;
+    return this.http.get(url).pipe(
+      map((resp: any) => {
+        return resp.usuarios;
+      })
+    );
+  }
+
+  borrarUsuario(id: string) {
+    let url = URL_SERVICIOS + '/usuario/' + id;
+    url += '?token=' + this.token;
+    return this.http.delete(url)
+        .pipe(map((resp: any) => {
+          swal('Usuario borrado', 'El usuario ha sido eliminado correctamente', 'success');
+          return true;
+        }));
+  }
+
 
   cambiarImagen(imagenSubir: File, id: string) {
     this._subirArchivoService.subirArchivo(imagenSubir, 'usuarios', id)
         .then((resp: any) => {
-          console.log(resp);
           this.usuario.img = resp.usuario.img;
           swal('Imagen Actualizado', this.usuario.nombre, 'success');
           this.guardarStorage(id, this.token, this.usuario);
@@ -155,6 +179,12 @@ export class UsuarioService {
         .catch(resp => {
           console.log(resp);
         });
+  }
+
+
+
+  buscarUsuarioById(id: string): Observable<any> {
+    return null;
   }
 
 

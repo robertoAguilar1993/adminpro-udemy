@@ -36,8 +36,8 @@
                     <tbody>
                         <tr *ngFor="let hospital of hospitales">
                             <td>
-                                <!--<img (click)="actualizarImagen( hospital )" [src]="hospital.img | imagen:'hospital'" class="img-50 pointer">-->
-                                <img (click)="actualizarImagen( hospital )" [src]="cargarImagen(hospital.img)" class="img-50 pointer">
+                                <img (click)="actualizarImagen( hospital )" [src]="hospital.img | imagenes:'hospital'" class="img-50 pointer">
+                                <!-- <img (click)="actualizarImagen( hospital )" [src]="cargarImagen(hospital.img)" class="img-50 pointer"> -->
 
                             </td>
                             <td>

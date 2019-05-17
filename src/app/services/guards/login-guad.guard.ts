@@ -15,10 +15,7 @@ export class LoginGuadGuard implements CanActivate {
   }
 
   canActivate() {
-    console.log('paso por el login guard');
-
     if ( this._usuarioService.estaLogueado() ) {
-      console.log('ESTA LOGUEADO');
       return true;
     } else {
       console.log('NO ESTA LOGUEADO');
