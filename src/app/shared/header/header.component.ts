@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/service.index';
 import { Usuario } from '../../models/usuario.model';
 import { URL_SERVICIOS } from '../../config/config';
@@ -12,7 +13,10 @@ export class HeaderComponent implements OnInit {
 
   usuario: Usuario;
 
-  constructor(private _usuarioService: UsuarioService) {
+  constructor(
+    private _usuarioService: UsuarioService,
+    public router: Router
+    ) {
   }
 
   ngOnInit() {
@@ -24,6 +28,13 @@ export class HeaderComponent implements OnInit {
       return img;
     }
     return URL_SERVICIOS + '/img/usuarios/' + img;
+  }
+
+  buscar(termino: string) {
+    console.log(termino);
+    if (termino && termino.length > 0) {
+      this.router.navigate(['/busqueda', termino]);
+    }
   }
 
 }

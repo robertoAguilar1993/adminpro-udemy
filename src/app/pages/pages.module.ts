@@ -23,6 +23,7 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { ModalUploadComponent } from '../componentes/modal-upload/modal-upload.component';
 import { MedicoComponent } from './medicos/medico.component';
+import { BusquedaComponent } from './busqueda/busqueda.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { MedicoComponent } from './medicos/medico.component';
         MedicosComponent,
         UsuariosComponent,
         ModalUploadComponent,
-        MedicoComponent
+        MedicoComponent,
+        BusquedaComponent
     ],
     imports: [
         CommonModule,
